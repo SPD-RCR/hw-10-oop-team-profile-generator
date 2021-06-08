@@ -1,10 +1,11 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
+const util = require('util');
 
-// create writeFile function using promises instead of a callback function
 const writeFileAsync = util.promisify(fs.writeFile);
 
-const promptUser = () => {
+// Initial questions for the Manager to fill out for himself/herself
+const promptManager = () => {
   return inquirer.prompt([
     {
       type: 'input',
@@ -30,23 +31,154 @@ const promptUser = () => {
       type: 'list',
       name: 'newEmployee',
       message: 'Would you like to add another employee?',
-      choices: ['Engineer', 'Intern', 'Finish building my team'],
-  },
-    {
-      type: 'input',
-      name: 'gitHub',
-      message: 'What is their GitHub UserName?',
-    },
-    {
-      type: 'input',
-      name: 'school',
-      message: 'What school are they currently attending?',
+      choices: ['Engineer', 'Intern', 'Finished adding all of my Team'],
     }
   ]);
 };
 
 const generateHTML = (answers) => 
+`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <title>My Team | Profile Generator</title>
+</head>
+<body>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">My Team</h1>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
 
-`# ${answers.title}
+            <div class="col col-12 col-sm-6 col-lg-4"  style="margin-bottom: 15px;">
+                <div class="card h-100 bg-primary text-white">
+                    <div class="card-body">
+                        <h2 class="card-title" id="name">${answers.name}</h2>
+                        <h4 class="card-title" id="role">Manager</h3>
+                        <div class="card bg-secondary text-secondary">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" id="id">id: ${answers.id}</li>
+                                <li class="list-group-item" id="email">Email: <a href="mailto:${answers.email}?cc=${answers.email}">${answers.email}</a></li>
+                                <li class="list-group-item" id="other">Office Number: ${answers.officeNumber}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-`
+        </div>
+    </div>
+</body>
+</html>`
+
+
+//Questions to Add ENGINEER 
+// const promptManager = () => {
+//   return inquirer.prompt([
+//     {
+//       type: 'input',
+//       name: 'name',
+//       message: 'What is the Engineer Name?',
+//     },
+//     {
+//       type: 'input',
+//       name: 'id',
+//       message: 'What is the Engineer Employee ID?',
+//     },
+//     {
+//       type: 'input',
+//       name: 'email',
+//       message: 'What is the Engineer Email Address?',
+//     },
+//     {
+//       type: 'input',
+//       name: 'gitHub',
+//       message: 'What is the Engineer GitHub UserName?',
+//     },
+//     {
+//       type: 'list',
+//       name: 'newEmployee',
+//       message: 'Would you like to add another employee?',
+//       choices: ['Engineer', 'Intern', 'Finished adding all of my Team'],
+//     }
+//   ]);
+// };
+
+// const generateHTML = (answers) => 
+// `           <div class="col col-12 col-sm-6 col-lg-4"  style="margin-bottom: 15px;">
+//                 <div class="card h-100 bg-primary text-white">
+//                     <div class="card-body">
+//                         <h2 class="card-title" id="name">${answers.name}</h2>
+//                         <h4 class="card-title" id="role">${answers.role}</h3>
+//                         <div class="card bg-secondary text-secondary">
+//                             <ul class="list-group list-group-flush">
+//                                 <li class="list-group-item" id="id">id: ${answers.id}</li>
+//                                 <li class="list-group-item" id="email">Email: <a href="mailto:${answers.email}">${answers.email}</a></li>
+//                                 <li class="list-group-item" id="other">GitHub Username: <a href="https://github.com/${answers.gitHub}/" target="_blank" rel="noopener noreferrer">${answers.gitHub}</a></li>
+//                             </ul>
+//                         </div>
+//                     </div>
+//                 </div>
+//             </div>`
+
+//Questions to Add INTERN 
+// const promptManager = () => {
+//   return inquirer.prompt([
+//     {
+//       type: 'input',
+//       name: 'name',
+//       message: 'What is the Intern Name?',
+//     },
+//     {
+//       type: 'input',
+//       name: 'id',
+//       message: 'What is the Intern Employee ID?',
+//     },
+//     {
+//       type: 'input',
+//       name: 'email',
+//       message: 'What is the Intern Email Address?',
+//     },
+//     {
+//       type: 'input',
+//       name: 'school',
+//       message: 'What school is the Intern currently attending?',
+//     },
+//     {
+//       type: 'list',
+//       name: 'newEmployee',
+//       message: 'Would you like to add another employee?',
+//       choices: ['Engineer', 'Intern', 'Finished adding all of my Team'],
+//     }
+//   ]);
+// };
+
+// const generateHTML = (answers) => 
+// `           <div class="col col-12 col-sm-6 col-lg-4"  style="margin-bottom: 15px;">
+//                 <div class="card h-100 bg-primary text-white">
+//                     <div class="card-body">
+//                         <h2 class="card-title" id="name">${answers.name}</h2>
+//                         <h4 class="card-title" id="role">${answers.role}</h3>
+//                         <div class="card bg-secondary text-secondary">
+//                             <ul class="list-group list-group-flush">
+//                                 <li class="list-group-item" id="id">id: ${answers.id}</li>
+//                                 <li class="list-group-item" id="email">Email: <a href="mailto:${answers.email}">${answers.email}</a></li>
+//                                 <li class="list-group-item" id="other">School: ${answers.school}</li>
+//                             </ul>
+//                         </div>
+//                     </div>
+//                 </div>
+//             </div>`
+
+const init = () => {
+  promptManager()
+    .then((answers) => writeFileAsync('./dist/team.html', generateHTML(answers)))
+    .then(() => console.log('Successfully wrote to team.html'))
+    .catch((err) => console.error(err));
+};
+
+init();

@@ -1,4 +1,4 @@
-const { hasUncaughtExceptionCaptureCallback } = require('process');
+// const { hasUncaughtExceptionCaptureCallback } = require('process');
 const Employee = require('../lib/Employee.js');
 
 test('Can create an Employee instance.', () => {
