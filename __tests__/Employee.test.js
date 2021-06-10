@@ -6,7 +6,7 @@ test('Can create an Employee instance.', () => {
     expect(typeof(e)).toBe('object');
 })
 
-test('Can create an Employee instance.', () => {
+test('Can create an Employee instance by confirming the Role.', () => {
     const e = new Employee;
     expect(e.getRole()).toBe('Employee');
 })
