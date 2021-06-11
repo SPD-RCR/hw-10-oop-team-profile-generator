@@ -1,8 +1,13 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
-const util = require('util');
 
-const writeFileAsync = util.promisify(fs.writeFile);
+
+const Employee = require('./lib/Employee');
+const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
+
+let teamHtml = "";
 
 // Initial questions for the Manager to fill out for himself/herself
 const managerQuestions = () => {
@@ -27,9 +32,11 @@ const managerQuestions = () => {
       name: 'officeNumber',
       message: 'What is the team manager Office Number?'
     }
-  ]);
-};
-let teamHtml
+  ]).then((answers) => {
+    managerHtml(answers);
+    addExit();
+  })
+}
 
 const managerHtml = (answers) => {
   teamHtml = `<!DOCTYPE html>
@@ -63,8 +70,8 @@ const managerHtml = (answers) => {
                           </div>
                       </div>
                   </div>
-              </div>`;
-  return teamHtml;
+              </div>`
+  return teamHtml
 };
 
 //Questions to Add ENGINEER 
@@ -90,7 +97,10 @@ const engineerQuestions = () => {
       name: 'gitHub',
       message: 'What is the Engineer GitHub UserName?',
     }
-  ])
+  ]).then((answers) => {
+    engineerHtml(answers);
+    addExit();
+  })
 };
 
 const engineerHtml = (answers) => {
@@ -136,7 +146,10 @@ const internQuestions = () => {
       name: 'school',
       message: 'What school is the Intern currently attending?',
     }
-  ])
+  ]).then((answers) => {
+    internHtml(answers);
+    addExit();
+  })
 };
 
 const internHtml = (answers) => {
@@ -158,7 +171,7 @@ const internHtml = (answers) => {
   return teamHtml;
 };
 
-// If/else
+
 const addExit = () => {
   return inquirer.prompt([
     {
@@ -166,10 +179,19 @@ const addExit = () => {
       name: 'addExit',
       message: 'Would you like to add another employee?'
     }
-  ])
+  ]).then((response) => {
+    // console.log('response:', response)
+    if (response.addExit) {
+      addNewEmployee()
+    } else {
+      endHtml()
+      // .then(() => writeFileAsync('./dist/team.html', generateHTML(teamHtml)))
+      // console.log('team html ', teamHtml)
+    }
+  })
 };
 
-// If/else
+
 const addNewEmployee = () => {
   return inquirer.prompt([
     {
@@ -180,16 +202,12 @@ const addNewEmployee = () => {
     }
   ]).then((answer) => {
     console.log('answer:', answer)
-    if (answer.value = "Engineer") {
-      return engineerQuestions().then((answers) => {
-        engineerHtml(answers);
-    })
+    if (answer.employeeRole === "Engineer") {
+      engineerQuestions()
    } else {
-      return internQuestions().then((answers) => {
-        internHtml(answers);
-      })
-    }
-  })
+      internQuestions()
+  }
+})
 };
 
 const endHtml = () => {
@@ -198,37 +216,36 @@ const endHtml = () => {
 </body>
 </html>`;
 
-  console.log('Successfully wrote to team.html')
-  //.catch((err) => console.error(err));
-};
-
-const init = () => {
-  managerQuestions().then((answers) => {
-    managerHtml(answers);
-    addExit().then((response) => {
-      console.log('response:', response)
-      if (response.addExit) {
-        addNewEmployee()
-      } else {
-        endHtml()
-        console.log('team html ', teamHtml)
-        // write file
-
-      // .then(() => writeFileAsync('./dist/team.html', generateHTML(teamHtml)))
-      // .then(() => console.log('Successfully wrote to team.html'))
-        process.exit(0)
+  fs.writeFile('./dist/team.html', teamHtml, err => {
+    if (err) {
+      console.log(err)
+      return
       }
-    })
-  });
+      console.log('Successfully wrote to team.html');
+      process.exit(0);
+    });
 };
 
-init();
+managerQuestions();
 
 // const init = () => {
-//   promptManager()
-//     .then((answers) => writeFileAsync('./dist/team.html', generateHTML(answers)))
-//     .then(() => console.log('Successfully wrote to team.html'))
-//     .catch((err) => console.error(err));
+//   managerQuestions().then((answers) => {
+//     managerHtml(answers);
+//     addExit().then((response) => {
+//       console.log('response:', response)
+//       if (response.addExit) {
+//         addNewEmployee()
+//       } else {
+//         endHtml()
+//         console.log('team html ', teamHtml)
+//         // write file
+
+//       // .then(() => writeFileAsync('./dist/team.html', generateHTML(teamHtml)))
+//       // .then(() => console.log('Successfully wrote to team.html'))
+//         process.exit(0)
+//       }
+//     })
+//   });
 // };
 
-// init();
+// init()
