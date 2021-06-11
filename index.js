@@ -5,7 +5,7 @@ const util = require('util');
 const writeFileAsync = util.promisify(fs.writeFile);
 
 // Initial questions for the Manager to fill out for himself/herself
-const startGenerator = () => {
+const managerQuestions = () => {
   return inquirer.prompt([
     {
       type: 'input',
@@ -25,19 +25,14 @@ const startGenerator = () => {
     {
       type: 'input',
       name: 'officeNumber',
-      message: 'What is the team manager Office Number?',
-    },
-    {
-      type: 'list',
-      name: 'newEmployee',
-      message: 'Would you like to add another employee?',
-      choices: ['Engineer', 'Intern', 'Finished adding all of my Team'],
+      message: 'What is the team manager Office Number?'
     }
   ]);
 };
+let teamHtml
 
-const generateHTML = (answers) => {
-  let teamHtml = `<!DOCTYPE html>
+const managerHtml = (answers) => {
+  teamHtml = `<!DOCTYPE html>
   <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -68,41 +63,12 @@ const generateHTML = (answers) => {
                           </div>
                       </div>
                   </div>
-              </div>`
-    return teamHtml;
-  };
-
-// If/else
-const addEmployee = () => {
-  return inquirer.prompt([
-    {
-      type: 'confirm',
-      name: 'addExit',
-      message: 'Would you like to add another employee?',
-      properties: 
-    }
-  ]);
-  if (answer) {
-    
-  } else {
-    
-  }
-};
-
-// If/else
-const addEmployee = () => {
-  return inquirer.prompt([
-    {
-      type: 'confirm',
-      name: 'newEmployee',
-      message: 'Which type of employee would you like to add?',
-      choices: ['Engineer', 'Intern'],
-    }
-  ]);
+              </div>`;
+  return teamHtml;
 };
 
 //Questions to Add ENGINEER 
-const addEngineer = () => {
+const engineerQuestions = () => {
   return inquirer.prompt([
     {
       type: 'input',
@@ -124,15 +90,16 @@ const addEngineer = () => {
       name: 'gitHub',
       message: 'What is the Engineer GitHub UserName?',
     }
-  ]);
+  ])
 };
 
-const engineerHTML = (answers) => {
-  let teamHtml = teamHtml + `           <div class="col col-12 col-sm-6 col-lg-4" style="margin-bottom: 15px;">
+const engineerHtml = (answers) => {
+  // const engineer = new Engineer (answers.name, answers.id, answers.email, answers.gitHub);
+  teamHtml = teamHtml + `           <div class="col col-12 col-sm-6 col-lg-4" style="margin-bottom: 15px;">
                 <div class="card h-100 bg-primary text-white">
                     <div class="card-body">
                         <h2 class="card-title" id="name">${answers.name}</h2>
-                        <h4 class="card-title" id="role">${answers.role}</h3>
+                        <h4 class="card-title" id="role">Engineer</h3>
                         <div class="card bg-secondary text-secondary">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item" id="id">id: ${answers.id}</li>
@@ -142,81 +109,117 @@ const engineerHTML = (answers) => {
                         </div>
                     </div>
                 </div>
-            </div>`
+            </div>`;
   return teamHtml;
 };
 
 //Questions to Add INTERN 
-// const promptManager = () => {
-//   return inquirer.prompt([
-//     {
-//       type: 'input',
-//       name: 'name',
-//       message: 'What is the Intern Name?',
-//     },
-//     {
-//       type: 'input',
-//       name: 'id',
-//       message: 'What is the Intern Employee ID?',
-//     },
-//     {
-//       type: 'input',
-//       name: 'email',
-//       message: 'What is the Intern Email Address?',
-//     },
-//     {
-//       type: 'input',
-//       name: 'school',
-//       message: 'What school is the Intern currently attending?',
-//     },
-//     {
-//       type: 'list',
-//       name: 'newEmployee',
-//       message: 'Would you like to add another employee?',
-//       choices: ['Engineer', 'Intern', 'Finished adding all of my Team'],
-//     }
-//   ]);
-// };
+const internQuestions = () => {
+  return inquirer.prompt([
+    {
+      type: 'input',
+      name: 'name',
+      message: 'What is the Intern Name?',
+    },
+    {
+      type: 'input',
+      name: 'id',
+      message: 'What is the Intern Employee ID?',
+    },
+    {
+      type: 'input',
+      name: 'email',
+      message: 'What is the Intern Email Address?',
+    },
+    {
+      type: 'input',
+      name: 'school',
+      message: 'What school is the Intern currently attending?',
+    }
+  ])
+};
 
-// const generateHTML = (answers) => 
-// `           <div class="col col-12 col-sm-6 col-lg-4"  style="margin-bottom: 15px;">
-//                 <div class="card h-100 bg-primary text-white">
-//                     <div class="card-body">
-//                         <h2 class="card-title" id="name">${answers.name}</h2>
-//                         <h4 class="card-title" id="role">${answers.role}</h3>
-//                         <div class="card bg-secondary text-secondary">
-//                             <ul class="list-group list-group-flush">
-//                                 <li class="list-group-item" id="id">id: ${answers.id}</li>
-//                                 <li class="list-group-item" id="email">Email: <a href="mailto:${answers.email}">${answers.email}</a></li>
-//                                 <li class="list-group-item" id="other">School: ${answers.school}</li>
-//                             </ul>
-//                         </div>
-//                     </div>
-//                 </div>
-//             </div>`
+const internHtml = (answers) => {
+  teamHtml = teamHtml + `           <div class="col col-12 col-sm-6 col-lg-4"  style="margin-bottom: 15px;">
+                <div class="card h-100 bg-primary text-white">
+                    <div class="card-body">
+                        <h2 class="card-title" id="name">${answers.name}</h2>
+                        <h4 class="card-title" id="role">Intern</h3>
+                        <div class="card bg-secondary text-secondary">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" id="id">id: ${answers.id}</li>
+                                <li class="list-group-item" id="email">Email: <a href="mailto:${answers.email}">${answers.email}</a></li>
+                                <li class="list-group-item" id="other">School: ${answers.school}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+  return teamHtml;
+};
 
-endHTML() {
-  let teamHtml = teamHtml + `   </div>
+// If/else
+const addExit = () => {
+  return inquirer.prompt([
+    {
+      type: 'confirm', // boolean default true
+      name: 'addExit',
+      message: 'Would you like to add another employee?'
+    }
+  ])
+};
+
+// If/else
+const addNewEmployee = () => {
+  return inquirer.prompt([
+    {
+      type: 'list',
+      name: 'employeeRole',
+      message: 'What is the employee role?',
+      choices: ['Engineer', 'Intern']
+    }
+  ]).then((answer) => {
+    console.log('answer:', answer)
+    if (answer.value = "Engineer") {
+      return engineerQuestions().then((answers) => {
+        engineerHtml(answers);
+    })
+   } else {
+      return internQuestions().then((answers) => {
+        internHtml(answers);
+      })
+    }
+  })
+};
+
+const endHtml = () => {
+  teamHtml = teamHtml + `   </div>
     </div>
 </body>
-</html>`
-return
+</html>`;
+
+  console.log('Successfully wrote to team.html')
+  //.catch((err) => console.error(err));
 };
 
 const init = () => {
-  startGenerator()
-    .then((answers) => generateHTML(answers))
-    .then(addExit(answer))
+  managerQuestions().then((answers) => {
+    managerHtml(answers);
+    addExit().then((response) => {
+      console.log('response:', response)
+      if (response.addExit) {
+        addNewEmployee()
+      } else {
+        endHtml()
+        console.log('team html ', teamHtml)
+        // write file
 
-    if addEmployee() {
-      addEngineer();
-    } else {
-      addIntern()
-    } else {
-      endHTML()
-    }
-    .then(() => console.log('Successfully wrote to team.html'))
-    .catch((err) => console.error(err));
+      // .then(() => writeFileAsync('./dist/team.html', generateHTML(teamHtml)))
+      // .then(() => console.log('Successfully wrote to team.html'))
+        process.exit(0)
+      }
+    })
+  });
 };
 
 init();
