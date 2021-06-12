@@ -201,7 +201,7 @@ const addNewEmployee = () => {
       choices: ['Engineer', 'Intern']
     }
   ]).then((answer) => {
-    console.log('answer:', answer)
+    // console.log('answer:', answer)
     if (answer.employeeRole === "Engineer") {
       engineerQuestions()
    } else {
@@ -226,6 +226,8 @@ const endHtml = () => {
     });
 };
 
+// After user runs > node index.js
+// managerQuestions are the first questions related to generating a Team Profile
 managerQuestions();
 
 // const init = () => {
